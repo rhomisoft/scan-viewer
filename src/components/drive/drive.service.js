@@ -21,7 +21,7 @@ var module = angular.module('editor.drive', ['editor.gapi']);
 module.service('drive', ['$q', '$cacheFactory', 'googleApi', 'applicationId', function($q, $cacheFactory, googleApi, applicationId) {
 
   // Only fetch fields that we care about
-  var DEFAULT_FIELDS = 'id,title,mimeType,userPermission,editable,copyable,shared,fileSize';
+  var DEFAULT_FIELDS = 'id,title,mimeType,userPermission,copyable,shared,fileSize';
 
   var cache = $cacheFactory('files');
 
@@ -54,8 +54,7 @@ module.service('drive', ['$q', '$cacheFactory', 'googleApi', 'applicationId', fu
     }
     return googleApi.then(function(gapi) {
       var metadataRequest = gapi.client.drive.files.get({
-        fileId: fileId,
-        fields: DEFAULT_FIELDS
+        fileId: fileId
       });
       var contentRequest = gapi.client.drive.files.get({
         fileId: fileId,
@@ -63,6 +62,7 @@ module.service('drive', ['$q', '$cacheFactory', 'googleApi', 'applicationId', fu
       });
       return $q.all([$q.when(metadataRequest), $q.when(contentRequest)]);
     }).then(function(responses) {
+		//console.log(responses);
       return combineAndStoreResults(responses[0].result, responses[1].body);
     });
   };
@@ -109,15 +109,15 @@ module.service('drive', ['$q', '$cacheFactory', 'googleApi', 'applicationId', fu
   };
 
   /**
-   * Displays the Drive file picker configured for selecting text files
+   * Displays the Drive file picker configured for selecting image files
    *
    * @return {Promise} Promise that resolves with the ID of the selected file
    */
   this.showPicker = function() {
     return googleApi.then(function(gapi) {
       var deferred = $q.defer();
-      var view = new google.picker.View(google.picker.ViewId.DOCS);
-      view.setMimeTypes('text/plain');
+      var view = new google.picker.View(google.picker.ViewId.DOCS_IMAGES);
+      view.setMimeTypes('image/jpeg');
       var picker = new google.picker.PickerBuilder()
         .setAppId(applicationId)
         .setOAuthToken(gapi.auth.getToken().access_token)

@@ -21,6 +21,7 @@
   <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
 </div>
 <md-content ng-hide="loading" layout-margin flex class="editor-frame md-whiteframe-z1">
-  <ui-codemirror flex ng-model="file.content" ui-refresh="loading"></ui-codemirror>
+  <!--<ui-codemirror flex ng-model="file.content" ui-refresh="loading"></ui-codemirror>-->
+  <img ng-src='{{file.metadata.webContentLink}}'/>
 </md-content>
 

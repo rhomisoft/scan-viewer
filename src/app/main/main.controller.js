@@ -71,6 +71,7 @@ module.controller('MainCtrl', ['$scope', '$location', '$routeParams', '$q', '$md
     var filePromise = fileId ? drive.loadFile(fileId) : $q.when(DEFAULT_FILE);
     return filePromise.then(function(file) {
       $scope.file = file;
+	  console.log(file);
       return $scope.file;
     }, function(err) {
       if(fileId) {
